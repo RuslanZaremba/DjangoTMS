@@ -1,0 +1,38 @@
+{% extends 'my_blog/base.html' %}
+{% block content %}
+<div class="post">
+    {% if user.is_authenticated %}
+    <a class="btn btn-default" href="{% url 'post_edit' post_pk=post.pk %}"><span class="glyphicon
+    glyphicon-pencil"></span></a>
+    <a class="btn btn-default" href="{% url 'post_delete' post_pk=post.pk %}"><span class="glyphicon
+    glyphicon-trash"></span></a>
+    {% endif %}
+    <h1>{{ post.title }}</h1>
+    <p>{{ post.text|linebreaksbr }}</p>
+    {% if post.published_date %}
+    <div class="date">
+        {{ post.published_date }}
+    </div>
+    {% else %}
+    <p>Пост не опубликован</p>
+    <a class="btn btn-default" href="{% url 'post_publish' post_pk=post.pk %}">Опубликовать</a>
+    <br>
+    {% endif %}
+    {% if post.published_date is not null%}
+    {% for comment in comments %}
+    <div class="comment">
+        <p class="info">
+            {{comment.created_date}}
+            {{ comment.text}}
+        </p>
+    </div>
+    {% endfor %}
+    <h2>Добавить комментарий:</h2>
+    <form method="post">
+        {% csrf_token %}
+        {{form.as_p }}
+        <button type="submit" class="save btn btn-default">Отправить</button>
+    </form>
+    {% endif %}
+</div>
+{% endblock %}
