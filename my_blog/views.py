@@ -2,7 +2,11 @@ from django.shortcuts import render, redirect, get_object_or_404
 from django.utils import timezone
 from my_blog.models import Post, Comment
 from .forms import PostForm, CommentForm
+from django.http import HttpResponse
+from django.contrib.auth.models import User
 
+def login(request):
+    return HttpResponse(request, 'my_blog/login.html')
 
 def post_detail(request, post_pk):
     post = get_object_or_404(Post, pk=post_pk)
@@ -74,5 +78,3 @@ def post_publish(request, post_pk):
     post.publish()
     return redirect('post_detail', post_pk=post_pk)
 
-def login(request):
-    pass
